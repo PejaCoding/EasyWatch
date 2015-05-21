@@ -29,5 +29,11 @@ namespace EasyWatch.Model
         public string series { get; set; }
         public Epi epi { get; set; }
         public List<Link> links { get; set; }
+
+        public List<Link> VLinks
+        {
+            get { return links.FindAll(p => p.hoster.Contains("Streamcloud") || p.hoster.Contains("Vivo")); }
+        }
+
     }
 }

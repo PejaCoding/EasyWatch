@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Windows;
 using EasyWatch.Model;
 using GalaSoft.MvvmLight;
 
@@ -17,6 +21,7 @@ namespace EasyWatch.ViewModel
         private List<Epi> _episodenListe = new List<Epi>();
         private Epi _selectedEpisode;
         private EpisodenInformationen _selectEpisodenInformationen { get; set; }
+        private List<string> _directLinks = new List<string>();
 
 
 
@@ -71,7 +76,7 @@ namespace EasyWatch.ViewModel
                         }
                         for (int i = 0; i < int.Parse(SelectedSerie.SerienInformation.series.seasons); i++)
                         {
-                            tmp.Add("Staffel " + (i +1));
+                            tmp.Add("Staffel " + (i + 1));
                         }
                         StaffelListe = tmp;
 
@@ -133,6 +138,10 @@ namespace EasyWatch.ViewModel
             }
         }
 
+        /// <summary>
+        /// Sets and gets the SelectedEpisode property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
         public Epi SelectedEpisode
         {
             get { return _selectedEpisode; }
@@ -144,11 +153,14 @@ namespace EasyWatch.ViewModel
                 (item, error) =>
                 {
                     SelectEpisodenInformationen = item;
-                },SelectedSerie,SelectedStaffel,value);
-                
+                }, SelectedSerie, SelectedStaffel, value);
             }
         }
 
+        /// <summary>
+        /// Sets and gets the SelectEpisodenInformationen property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
         public EpisodenInformationen SelectEpisodenInformationen
         {
             get { return _selectEpisodenInformationen; }
@@ -156,9 +168,41 @@ namespace EasyWatch.ViewModel
             {
                 _selectEpisodenInformationen = value;
                 RaisePropertyChanged();
+                List<string> tmp = new List<string>();
+                foreach (var HosterLink in value.VLinks)
+                {
+                    if (HosterLink.hoster == "Streamcloud")
+                    {
+                        _dataService.LadeHosterInformationen(async (item, exception) =>
+                        {
+                          string directlink = await  Hoster.StreamCloud(item.fullurl);
+                            tmp.Add(directlink);
+                        },HosterLink.id);
+                    }
+                    else if (HosterLink.hoster == "Vivo")
+                    {
+                        _dataService.LadeHosterInformationen(async (item, exception) =>
+                        {
+                            string directlink = await Hoster.Vivo(item.fullurl);
+                            tmp.Add(directlink);
+                        }, HosterLink.id);
+                    }
+                    
+                }
+                Directlinks = tmp;
             }
         }
 
+
+        public List<string> Directlinks
+        {
+            get { return _directLinks; }
+            set
+            {
+                _directLinks = value;
+                RaisePropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.

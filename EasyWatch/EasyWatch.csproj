@@ -76,6 +76,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\EpisodenInformationen.cs" />
+    <Compile Include="Model\Hoster.cs" />
+    <Compile Include="Model\HosterInformationen.cs" />
     <Compile Include="Model\Serie.cs" />
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Model\IDataService.cs" />

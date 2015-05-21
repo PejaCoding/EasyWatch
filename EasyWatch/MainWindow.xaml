@@ -27,8 +27,8 @@
         <ListView Height="100" 
                   ItemsSource="{Binding EpisodenListe, UpdateSourceTrigger=PropertyChanged}"
                   SelectedItem="{Binding SelectedEpisode}"/>
-        <ListView Height="100" 
-                  ItemsSource="{Binding SelectEpisodenInformationen.links, UpdateSourceTrigger=PropertyChanged}"/>
+        <ComboBox  
+                  ItemsSource="{Binding Directlinks, UpdateSourceTrigger=PropertyChanged}"/>
 
     </StackPanel>
 </Window>

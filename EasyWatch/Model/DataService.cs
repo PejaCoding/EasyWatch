@@ -33,5 +33,12 @@ namespace EasyWatch.Model
             selectedSerie.episodenInformationen = JsonConvert.DeserializeObject<EpisodenInformationen>(await client.GetStringAsync("http://bs.to/api/series/" + selectedSerie.id + "/" + selectedStaffel + "/" + selectedEpisode.epi));
             callback(selectedSerie.episodenInformationen, null);
         }
+
+        public async Task LadeHosterInformationen(Action<HosterInformationen, Exception> callback, string HosterID)
+        {
+            HttpClient client = new HttpClient();
+            callback(JsonConvert.DeserializeObject<HosterInformationen>(
+                await client.GetStringAsync("http://bs.to/api/watch/" + HosterID)),null);
+        }
     }
 }

@@ -10,5 +10,6 @@ namespace EasyWatch.Model
         Task LadeSerienInformationen(Action<SerienInformationen, Exception> callback, Serie selectedSerie);
         Task LadeSerienInformationen(Action<SerienInformationen, Exception> callback, Serie selectedSerie, string selectedStaffel);
         Task LadeEpisodenInformationen(Action<EpisodenInformationen, Exception> callback, Serie selectedSerie,string selectedStaffel, Epi selectedEpisode);
+        Task LadeHosterInformationen(Action<HosterInformationen, Exception> callback, string HosterID);
     }
 }
